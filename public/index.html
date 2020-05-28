@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app"></div>
+    <div onclick="handle_click()">点击移除</div>
+</body>
+</html>
+<script src="./com.diff.js"></script>
+<script>
+    let {Render} = diff;
+    let a = new Render({
+        dom : document.getElementById('app'),
+        'renderID' : 'test_diff_div_app',
+    });
+    let {render, h} = a;
+    let vi = h(
+        'div',
+        {id : 'evDiv', className : 'one'},
+        h('p', {className: '123'}, '8888888')
+    );
+    render({ view : vi });
+    setTimeout(() => {
+        render({view : h(
+                'div',
+                {id : 'evDiv', className : 'one two'},
+                h('p', {className: '123'}, '9999999')
+            )
+        });
+    }, 5000);
+
+    function handle_click() {
+        a.removeRender();
+    }
+</script>
