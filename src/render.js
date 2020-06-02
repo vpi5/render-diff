@@ -11,31 +11,37 @@ const {
 class Render {
     constructor(props) {
         this.config = {
-            ...props
+            view : null
         };
     }
 
-    render = ({ view }) => {
-        let {dom} = this.config;
+    render = ({ view, dom }) => {
         if(!this.config['view']){
             // 创建
             dom.appendChild(Render.prototype.createElement(view));
         }
         if(this.config['view']){
-            let oldView = this.config['view'];
             // 更新  ==> dom元素 newView新的 oldView 旧的
-            Render.prototype.up_render({dom, newView : view, oldView});
+            Render.prototype.up_render({dom, newView : view, oldView : this.config['view']});
         }
         this.config['view'] = JSON.parse(JSON.stringify(view));
     };
 
-    removeRender = () => {
+    removeRender = ({dom}) => {
         // 移除 全部元素
-        if(this.config && this.config.dom){
-            this.config.dom.innerHTML = '';
+        if(this.config['view'] && dom){
+            dom.innerHTML = '';
             this.config['view'] = null;
         }
     };
+
+    h = (type, props, ...children) => {
+        return {
+            type,
+            props: props || {},
+            children: Render.prototype.flatten(children)
+        };
+    }
 
 }
 
@@ -196,5 +202,5 @@ Render.prototype.up_render = function ({dom, newView, oldView}) {
 };
 
 module.exports = {
-    Render
+    Render : new Render()
 };

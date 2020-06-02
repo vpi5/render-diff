@@ -12,6 +12,28 @@
 <script src="./com.diff.js"></script>
 <script>
     let {Render} = diff;
+    let {render, h, removeRender} = Render;
+    let vi = h(
+        'div',
+        {id : 'evDiv', className : 'one'},
+        h('p', {className: '123'}, '8888888')
+    );
+    render({ dom : document.getElementById('app'), view : vi });
+    setTimeout(() => {
+        render({
+            dom : document.getElementById('app'),
+            view : h(
+                'div',
+                {id : 'evDiv', className : 'one'},
+                h('p', {className: '123'}, '9999999')
+            )
+        });
+    }, 5000);
+
+    function handle_click() {
+        removeRender({ dom : document.getElementById('app') });
+    }
+    /*let {Render} = diff;
     let a = new Render({
         dom : document.getElementById('app'),
         'renderID' : 'test_diff_div_app',
@@ -34,5 +56,5 @@
 
     function handle_click() {
         a.removeRender();
-    }
+    }*/
 </script>
